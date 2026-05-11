@@ -21,6 +21,7 @@ SEARCH_TERMS = [
     "tech",
     "IT",
     "site reliability",
+    "trading",
 ]
 
 EXCLUDE_TERMS = [
