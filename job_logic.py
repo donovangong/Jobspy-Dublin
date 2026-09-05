@@ -10,7 +10,6 @@ from jobspy import scrape_jobs
 
 SEARCH_TERMS = [
     "graduate",
-    "graduate programme",
     "entry level",
     "junior",
     "trainee",
@@ -49,7 +48,7 @@ def scrape_all_jobs() -> pd.DataFrame:
                     search_term=term,
                     location="Dublin, Ireland",
                     results_wanted=100,
-                    hours_old=24,
+                    hours_old=72,
                     country_indeed="Ireland",
                     linkedin_fetch_description=(site == "linkedin"),
                 )
