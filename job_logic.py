@@ -10,6 +10,7 @@ from jobspy import scrape_jobs
 
 SEARCH_TERMS = [
     "graduate",
+    "intern",
     # "entry level",
     # "junior",
     # "trainee",
