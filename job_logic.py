@@ -14,14 +14,7 @@ SEARCH_TERMS = [
     "entry level",
     "junior",
     "trainee",
-    "associate",
-    "new grad",
-    "devops",
-    "sre",
-    "tech",
-    "IT",
-    "site reliability",
-    "trading",
+    "new grad"
 ]
 
 EXCLUDE_TERMS = [
