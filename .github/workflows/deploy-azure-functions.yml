@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_NAME: jobspy-cork-grad
-  PYTHON_VERSION: '3.13'
+  AZURE_FUNCTIONAPP_NAME: jobspydublin
+  PYTHON_VERSION: '3.14'
 
 jobs:
   build-and-deploy:
