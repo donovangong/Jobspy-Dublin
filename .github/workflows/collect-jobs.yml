@@ -2,6 +2,12 @@ name: Collect jobs and update website
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * *"
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/collect-jobs.yml'
 
 permissions:
   contents: write
@@ -69,3 +75,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
+
