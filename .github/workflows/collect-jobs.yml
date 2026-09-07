@@ -1,6 +1,7 @@
 name: Collect jobs and update website
 
 on:
+  # Manual refresh trigger
   workflow_dispatch:
   schedule:
     - cron: "0 8 * * *"
