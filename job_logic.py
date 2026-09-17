@@ -127,7 +127,8 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
         </tr>
         """
     else:
-        rows = []
+        new_rows = []
+        old_rows = []
         for _, row in df.iterrows():
             title = normalize_text(row.get("title"))
             company = normalize_text(row.get("company"))
@@ -143,16 +144,33 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
                 if url else title
             )
 
-            rows.append(f"""
+            row_html = f"""
             <tr>
               <td>{title_html}</td>
               <td>{company}</td>
               <td>{location}</td>
               <td>{site}</td>
             </tr>
-            """)
+            """
+            (new_rows if is_new else old_rows).append(row_html)
 
-        rows_html = "\n".join(rows)
+        new_rows_html = "\n".join(new_rows)
+        old_rows_html = "\n".join(old_rows)
+        new_section = f"""
+        <h2>New jobs ({len(new_rows)})</h2>
+        <table>
+          <thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Site</th></tr></thead>
+          <tbody>{new_rows_html or '<tr><td colspan="4">No new jobs today.</td></tr>'}</tbody>
+        </table>
+        """
+        old_section = f"""
+        <h2>Existing jobs</h2>
+        <table>
+          <thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Site</th></tr></thead>
+          <tbody>{old_rows_html or '<tr><td colspan="4">No existing jobs.</td></tr>'}</tbody>
+        </table>
+        """
+        rows_html = new_section + old_section
 
     return f"""<!doctype html>
 <html lang="en">
