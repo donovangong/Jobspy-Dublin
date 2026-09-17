@@ -91,6 +91,8 @@ def filter_jobs(df: pd.DataFrame) -> pd.DataFrame:
         & df["site"].str.strip().str.lower().eq("site")
     )
     df = df[~header_mask]
+    # Also reject any residual header-like row even if one of its other cells changed.
+    df = df[~df["title"].str.strip().str.lower().eq("title")]
     
     exclude_pattern = r"senior|staff|principal|lead|manager|director|head|vp"
     exclude_mask = df["title"].str.contains(exclude_pattern, case=False, na=False)
@@ -145,6 +147,9 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
             site = normalize_text(row.get("site"))
             url = normalize_text(row.get("job_url"))
             is_new = bool(row.get("is_new", False))
+
+            if title.strip().lower() == "title":
+                continue
 
             safe_url = url if url else "#"
             display_title = f"(NEW) {title}" if is_new else title
