@@ -11,9 +11,9 @@ from jobspy import scrape_jobs
 SEARCH_TERMS = [
     "graduate",
     "graduate programme",
-    "entry level",
-    "junior",
-    "trainee",
+    # "entry level",
+    # "junior",
+    # "trainee",
     "new grad"
 ]
 
