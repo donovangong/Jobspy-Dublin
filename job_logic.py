@@ -186,7 +186,6 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
         old_section = f"""
         <h2>Existing jobs</h2>
         <table>
-          <thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Site</th></tr></thead>
           <tbody>{old_rows_html or '<tr><td colspan="4">No existing jobs.</td></tr>'}</tbody>
         </table>
         """
