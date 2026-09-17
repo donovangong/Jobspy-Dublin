@@ -10,10 +10,10 @@ from jobspy import scrape_jobs
 
 SEARCH_TERMS = [
     "graduate",
-    "intern",
-    # "entry level",
-    # "junior",
-    # "trainee",
+    "graduate programme",
+    "entry level",
+    "junior",
+    "trainee",
     "new grad"
 ]
 
@@ -49,7 +49,7 @@ def scrape_all_jobs() -> pd.DataFrame:
                     search_term=term,
                     location="Dublin, Ireland",
                     results_wanted=100,
-                    hours_old=72,
+                    hours_old=24,
                     country_indeed="Ireland",
                     linkedin_fetch_description=(site == "linkedin"),
                 )
@@ -109,6 +109,16 @@ def filter_jobs(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def mark_new_jobs(df: pd.DataFrame, previous_df: pd.DataFrame) -> pd.DataFrame:
+    """Mark jobs that were absent from the immediately previous snapshot."""
+    result = df.copy()
+    previous_urls = set()
+    if previous_df is not None and not previous_df.empty and "job_url" in previous_df:
+        previous_urls = set(previous_df["job_url"].fillna("").astype(str).str.strip())
+    result["is_new"] = ~result["job_url"].fillna("").astype(str).str.strip().isin(previous_urls)
+    return result.sort_values(["is_new", "title"], ascending=[False, True], kind="stable")
+
+
 def build_html(df: pd.DataFrame, generated_at: str) -> str:
     if df.empty:
         rows_html = """
@@ -124,10 +134,12 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
             location = normalize_text(row.get("location"))
             site = normalize_text(row.get("site"))
             url = normalize_text(row.get("job_url"))
+            is_new = bool(row.get("is_new", False))
 
             safe_url = url if url else "#"
+            display_title = f"(NEW) {title}" if is_new else title
             title_html = (
-                f'<a href="{safe_url}" target="_blank" rel="noopener noreferrer">{title}</a>'
+                f'<a href="{safe_url}" target="_blank" rel="noopener noreferrer">{display_title}</a>'
                 if url else title
             )
 
@@ -286,3 +298,4 @@ def run_pipeline() -> Dict[str, Any]:
         "html_path": html_path,
         "csv_path": csv_path,
     }
+
