@@ -1,7 +1,6 @@
 name: Collect jobs and update website
 
 on:
-  # Manual refresh trigger
   workflow_dispatch:
   schedule:
     - cron: "0 8 * * *"
@@ -43,12 +42,15 @@ jobs:
           import os
           from datetime import datetime, timezone
           from pathlib import Path
-          from job_logic import scrape_all_jobs, filter_jobs, build_html
+          import pandas as pd
+          from job_logic import scrape_all_jobs, filter_jobs, build_html, mark_new_jobs
 
           raw = scrape_all_jobs()
           jobs = filter_jobs(raw)
           if raw.empty or jobs.empty:
               raise RuntimeError("No usable jobs collected; keeping the existing website.")
+          previous = pd.read_csv("docs/jobs-dublin.csv") if Path("docs/jobs-dublin.csv").exists() else pd.DataFrame()
+          jobs = mark_new_jobs(jobs, previous)
           generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
           Path("docs").mkdir(exist_ok=True)
           Path("docs/index.html").write_text(build_html(jobs, generated_at), encoding="utf-8")
