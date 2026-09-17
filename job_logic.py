@@ -137,6 +137,12 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
           <td colspan="4">No jobs found in the last 24 hours.</td>
         </tr>
         """
+        jobs_html = f"""
+        <table>
+          <thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Site</th></tr></thead>
+          <tbody>{rows_html}</tbody>
+        </table>
+        """
     else:
         new_rows = []
         old_rows = []
@@ -184,7 +190,7 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
           <tbody>{old_rows_html or '<tr><td colspan="4">No existing jobs.</td></tr>'}</tbody>
         </table>
         """
-        rows_html = new_section + old_section
+        jobs_html = new_section + old_section
 
     return f"""<!doctype html>
 <html lang="en">
@@ -243,19 +249,7 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
   <div class="meta">
     <a href="jobs-dublin.csv" download>Download filtered CSV</a>
   </div>
-  <table>
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Company</th>
-        <th>Location</th>
-        <th>Site</th>
-      </tr>
-    </thead>
-    <tbody>
-      {rows_html}
-    </tbody>
-  </table>
+  {jobs_html}
 </body>
 </html>
 """
