@@ -1,8 +1,6 @@
 name: Deploy Azure Function App
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 env:
@@ -30,3 +28,4 @@ jobs:
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           sku: flexconsumption
           remote-build: true
+
