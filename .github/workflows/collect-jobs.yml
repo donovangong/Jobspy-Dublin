@@ -4,10 +4,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17 8 * * *"
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/collect-jobs.yml'
 
 permissions:
   contents: write
