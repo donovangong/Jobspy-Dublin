@@ -82,6 +82,15 @@ def filter_jobs(df: pd.DataFrame) -> pd.DataFrame:
     df["description"] = df["description"].fillna("")
     df["job_url"] = df["job_url"].fillna("")
     df["site"] = df["site"].fillna("")
+
+    # Some scrapers can return the CSV header as a bogus job row.
+    header_mask = (
+        df["title"].str.strip().str.lower().eq("title")
+        & df["company"].str.strip().str.lower().eq("company")
+        & df["location"].str.strip().str.lower().eq("location")
+        & df["site"].str.strip().str.lower().eq("site")
+    )
+    df = df[~header_mask]
     
     exclude_pattern = r"senior|staff|principal|lead|manager|director|head|vp"
     exclude_mask = df["title"].str.contains(exclude_pattern, case=False, na=False)
