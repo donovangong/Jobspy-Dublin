@@ -1,7 +1,6 @@
 name: Collect jobs and update website
 
 on:
-  # Refresh after search-term changes
   workflow_dispatch:
   schedule:
     - cron: "0 8 * * *"
@@ -74,9 +73,4 @@ jobs:
           git pull --rebase origin main
           git push origin HEAD:main
 
-      # Commits made with GITHUB_TOKEN do not automatically trigger Pages.
-      - name: Request GitHub Pages build
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
 
